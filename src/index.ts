@@ -1,34 +1,9 @@
-import { Store, mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import compositionApi, { Ref, computed } from "@vue/composition-api";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import compositionApi, { computed } from "@vue/composition-api";
 import vue, { VueConstructor } from "vue";
+import { Dictionary, VuexStore, MapToComputed, Map } from "./types";
 
 vue.use(compositionApi);
-
-type VuexStore<R> = Store<R> & {
-  _modulesNamespaceMap: Dictionary<{
-    _rawModule: {
-      state: Dictionary<any>;
-      actions: Dictionary<any>;
-      mutations: Dictionary<any>;
-      getters: Dictionary<any>;
-    };
-  }>;
-};
-type Computed<T> = Readonly<Ref<Readonly<T>>>;
-type Dictionary<T> = { [k: string]: T };
-type MapToComputed<T = any> = T extends object
-  ? {
-      [K in keyof T]: T[K] extends Function
-        ? Readonly<Ref<T[K]>>
-        : Computed<T[K]>;
-    }
-  : Dictionary<Computed<any>>;
-
-type Map<T = any> = T extends object
-  ? {
-      [K in keyof T]: T[K];
-    }
-  : Dictionary<any>;
 
 const _context: {
   $vm: Vue | null;
