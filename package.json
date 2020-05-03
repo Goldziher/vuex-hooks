@@ -4,6 +4,7 @@
   "description": "Compact vuex composition api helper functions",
   "main": "src/index.ts",
   "scripts": {
+    "build": "rimraf dist && rollup -c rollup.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +23,10 @@
   },
   "homepage": "https://github.com/Goldziher/vuex-hooks#readme",
   "devDependencies": {
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.7.6",
+    "rollup-plugin-typescript2": "^0.27.0",
     "typescript": "^3.8.3"
   },
   "dependencies": {
