@@ -1,0 +1,32 @@
+{
+  "name": "vuex-hooks",
+  "version": "1.0.0",
+  "description": "Compact vuex composition api helper functions",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Goldziher/vuex-hooks.git"
+  },
+  "keywords": [
+    "vuex",
+    "composition-api",
+    "hooks"
+  ],
+  "author": "Na'aman Hirschfeld",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Goldziher/vuex-hooks/issues"
+  },
+  "homepage": "https://github.com/Goldziher/vuex-hooks#readme",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@vue/composition-api": "^0.5.0",
+    "vue": "^2.6.11",
+    "vuex": "^3.3.0"
+  }
+}
