@@ -1,7 +1,14 @@
 import { mapActions, mapGetters, mapMutations, mapState, Store } from 'vuex'
 import compositionApi, { computed } from '@vue/composition-api'
 import vue, { VueConstructor } from 'vue'
-import { Dictionary, VuexStore, MapToComputed, Map } from './types'
+import {
+	Dictionary,
+	VuexStore,
+	MapToComputed,
+	FunctionMap,
+	VuexAction,
+	VuexMutation,
+} from './types'
 
 vue.use(compositionApi)
 
@@ -103,7 +110,9 @@ export function useGetters<S = any>(namespace: string): MapToComputed<S> {
 	return _context.getters[namespace] as MapToComputed<S>
 }
 
-export function useMutations<S = any>(namespace: string): Map<S> {
+export function useMutations<S = any>(
+	namespace: string,
+): FunctionMap<S, VuexMutation> {
 	validateNamespace(namespace, 'useMutations')
 	if (!_context.mutations[namespace]) {
 		_context.mutations[namespace] = Object.fromEntries(
@@ -112,10 +121,12 @@ export function useMutations<S = any>(namespace: string): Map<S> {
 			).map(([key, value]) => [key, value.bind(_context.getVm())]),
 		)
 	}
-	return _context.mutations[namespace] as Map<S>
+	return _context.mutations[namespace] as FunctionMap<S, VuexMutation>
 }
 
-export function useActions<S = any>(namespace: string): Map<S> {
+export function useActions<S = any>(
+	namespace: string,
+): FunctionMap<S, VuexAction> {
 	validateNamespace(namespace, 'useActions')
 	if (!_context.actions[namespace]) {
 		_context.actions[namespace] = Object.fromEntries(
@@ -124,5 +135,5 @@ export function useActions<S = any>(namespace: string): Map<S> {
 			).map(([key, value]) => [key, value.bind(_context.getVm())]),
 		)
 	}
-	return _context.actions[namespace] as Map<S>
+	return _context.actions[namespace] as FunctionMap<S, VuexAction>
 }

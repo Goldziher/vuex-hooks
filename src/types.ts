@@ -21,8 +21,11 @@ export type MapToComputed<T = any> = T extends object
 	  }
 	: Dictionary<Computed<any>>
 
-export type Map<T = any> = T extends object
+export type FunctionMap<T = any, F = Function> = T extends object
 	? {
 			[K in keyof T]: T[K]
 	  }
-	: Dictionary<any>
+	: Dictionary<F>
+
+export type VuexMutation = (payload: any) => void
+export type VuexAction = (payload: any) => Promise<any> | any
