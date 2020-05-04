@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "rimraf dist && rollup -c rollup.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -23,10 +23,16 @@
   },
   "homepage": "https://github.com/Goldziher/vuex-hooks#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "jest": "^25.5.4",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
     "rollup": "^2.7.6",
     "rollup-plugin-typescript2": "^0.27.0",
+    "ts-jest": "^25.4.0",
     "typescript": "^3.8.3"
   },
   "dependencies": {

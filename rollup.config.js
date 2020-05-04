@@ -28,12 +28,12 @@ export default [
 		input,
 		external,
 		...output('esm'),
-		...plugins(true),
+        ...plugins(true),
 	},
 	{
 		input,
 		external,
 		...output('cjs'),
-		...plugins(false),
+        ...plugins(false),
 	},
 ]

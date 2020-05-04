@@ -7,5 +7,7 @@
     "strict": true,                           
     "moduleResolution": "node",            
     "esModuleInterop": true                      
-  }
+  },
+  "include": ["src", "__test__"],
+  "exclude": ["node_modules", "dist"]
 }
