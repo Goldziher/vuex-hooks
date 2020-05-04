@@ -4,10 +4,10 @@ import { Ref } from '@vue/composition-api'
 export type VuexStore<R> = Store<R> & {
 	_modulesNamespaceMap: Dictionary<{
 		_rawModule: {
-			state: Dictionary<any>
-			actions: Dictionary<any>
-			mutations: Dictionary<any>
-			getters: Dictionary<any>
+			state?: Dictionary<any>
+			actions?: Dictionary<any>
+			mutations?: Dictionary<any>
+			getters?: Dictionary<any>
 		}
 	}>
 }
