@@ -8,7 +8,7 @@ Install the package using your package manager of choice:
 
 `npm i vuex-hooks` or `yarn add vuex-hooks`
 
-Then install the plugin in your entry point before calling new Vue:
+Then install the plugin in your entry point before instantiating vue:
 
 ```javascript
 import Vue from 'vue'
@@ -25,7 +25,7 @@ new Vue(...)
 
 ## Usage
 
-You can use the plugin inside regular javascript or typescript. When using typescript **typing is optional** but of course highly recommended.
+You can use the plugin in your composition functions or vue components.
 
 ```javascript
 <script>
@@ -100,9 +100,9 @@ The vuex helpers are being called under the hood by the hooks, and they are bein
 
 This sounds inefficent, but is in fact a bit more efficent than the regular implementation because the hooks use memoization. Thus calling `useState('locales')` will compute only once and then always return the result afterwards without recomputed (the values are of course computed, so they keep reactivity). The rest is done using destructuring and its inherent benefits.
 
-### Typing
+### TypeScript Support
 
-To use with typescript and typing, you should of course use either a ts/tsx file, or a vue file with the correct script header, and then pass an interface as a generic argument to the hooks.
+When using TypeScript **typing is optional** but is of course highly recommended. To use typing, you should of course use either a ts/tsx file or a vue file with the correct script header, and then pass an interface as a generic argument to the respective hook.
 
 Lets assume you defined some interfaces like so in a types.ts file:
 
@@ -154,7 +154,7 @@ export default defineComponent({
 <script>
 ```
 
-Doing this will result in the return values being correctly types, so for example
+Doing this will result in the return values being correctly typed, so for example the `supportedLocales` value will be:
 
 ```typescript
 
