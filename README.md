@@ -2,7 +2,7 @@
 
 This package offers TypeScript enabled vuex composition-api hooks, closing the gap between [Vuex](https://github.com/vuejs/vuex) and the [@Vue/composition-api](https://github.com/vuejs/composition-api).
 
-## installation
+## Installation
 
 Install the package using your package manager of choice:
 
@@ -23,9 +23,9 @@ new Vue(...)
 
 ```
 
-## usage
+## Usage
 
-You can use the plugin inside regular javascript or typescript. When using typescript **all typing is optional**.
+You can use the plugin inside regular javascript or typescript. When using typescript **typing is optional** but of course highly recommended.
 
 ```javascript
 <script>
@@ -47,7 +47,7 @@ export default defineComponent({
 <script>
 ```
 
-### computed refs and methods
+### Computed Refs and Methods
 
 The `useState` and `useGetters` hooks return computed readonly refs, thus to access their value inside the setup function you should use .value:
 
@@ -78,7 +78,7 @@ setup() {
 
 `useStore` return the main store object that is attached to the \$vm.
 
-### api
+### Api
 
 Although the api appears similar to the vuex helpers - `mapState, mapActions, mapGetters and mapMutations`, you do not need to pass a second "mapping" argument of the desired keys. That is, when you use the vuex helpers you would usually do something like this:
 
@@ -88,16 +88,19 @@ computed: {
 }
 ```
 
-This is not required here, just give the module name as a first argument and then destructure what is needed.
+This is not required here, just give the module name as a first argument and then destructure what is needed from the returned value.
+
 If you want to remap names, do this:
 
 ```javascript
 const { SET_LOCALE: setLocale } = useMutations('locales')
 ```
 
-The vuex helpers are being called under the hood by the hooks, and they are being given the entire module keys. So when you choose a module called `locales` inside the useMutations helper, all locales mutations are returned. This sounds inefficent, but is in fact a bit more efficent than the regular implementation because the hooks use memoization. Thus called `useMutations('locales')` will compute only once - when you first call this, and then always return the result afterwards, and the rest is done using destructuring.
+The vuex helpers are being called under the hood by the hooks, and they are being given the entire module's keys. So when you choose a module called `locales` inside the useState helper for example, all locales' module state entries are returned.
 
-### usage with typing
+This sounds inefficent, but is in fact a bit more efficent than the regular implementation because the hooks use memoization. Thus calling `useState('locales')` will compute only once and then always return the result afterwards without recomputed (the values are of course computed, so they keep reactivity). The rest is done using destructuring and its inherent benefits.
+
+### Typing
 
 To use with typescript and typing, you should of course use either a ts/tsx file, or a vue file with the correct script header, and then pass an interface as a generic argument to the hooks.
 
@@ -131,7 +134,7 @@ interface RootState {
 You can then use these in the hooks to get type inference:
 
 ```typescript
-<script>
+<script lang="ts">
 import { LocalesState, LocalesGetters, LocalesActions, LocalesMutations, RootState }
 import { defineComponent } from '@vue/composition-api'
 import { useStore, useState, useActions, useMutations, useGetters } from 'vuex-hooks'
@@ -151,6 +154,14 @@ export default defineComponent({
 <script>
 ```
 
-## Credit where its due
+Doing this will result in the return values being correctly types, so for example
+
+```typescript
+
+    supportedLocales === Readonly<Ref<Locale>>
+
+```
+
+## Credit Where its Due
 
 This package was inspired by the package [vue-hooks](https://github.com/u3u/vue-hooks). The differences between this package and the vue-hooks package are (a) this package is only for vuex-hooks, (b) this package has very few dependencies and (c) this package is fully typescript enabled.
