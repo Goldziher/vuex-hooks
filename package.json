@@ -1,8 +1,10 @@
 {
 	"name": "vuex-hooks",
-	"version": "1.0.0",
-  "description": "Compact vuex composition api helper functions",
-  "files": ["dist"],
+	"version": "1.0.1",
+	"description": "Compact vuex composition api helper functions",
+	"files": [
+		"dist"
+	],
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.js",
 	"browser": {
