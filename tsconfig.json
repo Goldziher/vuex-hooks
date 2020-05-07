@@ -3,7 +3,6 @@
 		"target": "ES5",
 		"module": "ES2015",
 		"declaration": true,
-		"declarationDir": "dist/types",
 		"strict": true,
 		"moduleResolution": "node",
 		"esModuleInterop": true

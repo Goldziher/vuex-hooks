@@ -25,7 +25,7 @@ export default [
 		...output('esm'),
 		plugins: [
 			typescript({
-				useTsconfigDeclarationDir: true,
+				useTsconfigDeclarationDir: false,
 			}),
 		],
 	},
@@ -35,7 +35,7 @@ export default [
 		...output('cjs'),
 		plugins: [
 			typescript({
-				useTsconfigDeclarationDir: true,
+				useTsconfigDeclarationDir: false,
 			}),
 		],
 	},
@@ -45,7 +45,7 @@ export default [
 		...output('umd'),
 		plugins: [
 			typescript({
-				useTsconfigDeclarationDir: true,
+				useTsconfigDeclarationDir: false,
 			}),
 			uglify(),
 		],

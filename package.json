@@ -3,8 +3,7 @@
 	"version": "1.0.3",
 	"description": "Compact vuex composition api helper functions",
 	"files": [
-		"dist",
-		"src/index.d.ts"
+		"dist"
 	],
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.js",
@@ -13,8 +12,6 @@
 		"./dist/esm/index.js": "./dist/esm/index.js"
 	},
 	"unpkg": "dist/umd/index.min.js",
-	"typings": "dist/types/index.d.ts",
-	"types": "dist/types/index.d.ts",
 	"scripts": {
 		"prepublishOnly": "yarn build",
 		"build": "rimraf dist && rollup -c rollup.config.js",
