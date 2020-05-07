@@ -1,25 +1,20 @@
 import typescript from 'rollup-plugin-typescript2'
+import { uglify } from 'rollup-plugin-uglify'
 
 const input = 'src/index.ts'
 const output = (type) => ({
 	output: {
 		exports: 'named',
-		file: `dist/${type}/index.js`,
+		file: type === 'umd' ? 'dist/umd/index.min.js' : `dist/${type}/index.js`,
 		format: type,
 		name: 'vuex-hooks',
 		sourcemap: true,
-	},
-})
-const plugins = (useDeclaration) => ({
-	plugins: typescript({
-		useTsconfigDeclarationDir: true,
-		tsconfigOverride: {
-			compilerOptions: {
-				target: 'ESNEXT',
-				declaration: useDeclaration,
-			},
+		globals: {
+			'vue': 'Vue',
+			'@vue/composition-api': 'vueCompositionApi',
+			'vuex': 'vuex',
 		},
-	}),
+	},
 })
 const external = ['vue', 'vuex', '@vue/composition-api']
 
@@ -28,12 +23,31 @@ export default [
 		input,
 		external,
 		...output('esm'),
-        ...plugins(true),
+		plugins: [
+			typescript({
+				useTsconfigDeclarationDir: true,
+			}),
+		],
 	},
 	{
 		input,
 		external,
 		...output('cjs'),
-        ...plugins(false),
+		plugins: [
+			typescript({
+				useTsconfigDeclarationDir: true,
+			}),
+		],
+	},
+	{
+		input,
+		external,
+		...output('umd'),
+		plugins: [
+			typescript({
+				useTsconfigDeclarationDir: true,
+			}),
+			uglify(),
+		],
 	},
 ]

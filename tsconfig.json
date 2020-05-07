@@ -1,13 +1,13 @@
 {
-  "compilerOptions": {  
-    "target": "ESNEXT",                          
-    "module": "es2015",                                        
-    "declaration": true,                   
-    "declarationDir": "dist/types",
-    "strict": true,                           
-    "moduleResolution": "node",            
-    "esModuleInterop": true                      
-  },
-  "include": ["src", "__test__"],
-  "exclude": ["node_modules", "dist"]
+	"compilerOptions": {
+		"target": "ES5",
+		"module": "ES2015",
+		"declaration": true,
+		"declarationDir": "dist/types",
+		"strict": true,
+		"moduleResolution": "node",
+		"esModuleInterop": true
+	},
+	"include": ["src", "__test__"],
+	"exclude": ["node_modules", "dist"]
 }

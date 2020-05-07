@@ -2,9 +2,19 @@
 	"name": "vuex-hooks",
 	"version": "1.0.0",
 	"description": "Compact vuex composition api helper functions",
-	"main": "src/index.ts",
+	"main": "dist/cjs/index.js",
+	"module": "dist/esm/index.js",
+	"browser": {
+		"./dist/cjs/index.js": "./dist/umd/index.js",
+		"./dist/esm/index.js": "./dist/esm/index.js"
+	},
+	"unpkg": "dist/umd/index.min.js",
+	"typings": "dist/types/index.d.ts",
+	"types": "dist/types/index.d.ts",
 	"scripts": {
+		"prepublishOnly": "yarn build",
 		"build": "rimraf dist && rollup -c rollup.config.js",
+		"postpublish": "rimraf dist",
 		"coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
 		"test": "jest"
 	},
@@ -38,11 +48,15 @@
 		"rimraf": "^3.0.2",
 		"rollup": "^2.7.6",
 		"rollup-plugin-typescript2": "^0.27.0",
+		"rollup-plugin-uglify": "^6.0.4",
 		"ts-jest": "^25.4.0",
 		"typescript": "^3.8.3",
-		"vue-template-compiler": "^2.6.11"
+		"vue-template-compiler": "^2.6.11",
+		"@vue/composition-api": "^0.5.0",
+		"vue": "^2.6.11",
+		"vuex": "^3.3.0"
 	},
-	"dependencies": {
+	"peerDependencies": {
 		"@vue/composition-api": "^0.5.0",
 		"vue": "^2.6.11",
 		"vuex": "^3.3.0"
