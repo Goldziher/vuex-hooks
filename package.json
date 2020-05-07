@@ -3,7 +3,8 @@
 	"version": "1.0.1",
 	"description": "Compact vuex composition api helper functions",
 	"files": [
-		"dist"
+		"dist",
+		"src/index.d.ts"
 	],
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.js",

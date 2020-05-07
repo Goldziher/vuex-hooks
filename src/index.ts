@@ -9,7 +9,7 @@ import {
 	VuexAction,
 	VuexMutation,
 	Computed,
-} from './types'
+} from './index.d'
 
 vue.use(compositionApi)
 
@@ -99,7 +99,7 @@ export function useState<S = any>(namespace: string): MapToComputed<S> {
 				{} as { [k: string]: Computed<any> },
 			)
 	}
-	return _context.state[namespace] as MapToComputed<S>
+	return _context.state[namespace]
 }
 
 export function useGetters<S = any>(namespace: string): MapToComputed<S> {
@@ -120,7 +120,7 @@ export function useGetters<S = any>(namespace: string): MapToComputed<S> {
 				{} as { [k: string]: Computed<any> },
 			)
 	}
-	return _context.getters[namespace] as MapToComputed<S>
+	return _context.getters[namespace]
 }
 
 export function useMutations<S = any>(
@@ -140,7 +140,7 @@ export function useMutations<S = any>(
 				{} as { [k: string]: Function },
 			)
 	}
-	return _context.mutations[namespace] as FunctionMap<S, VuexMutation>
+	return _context.mutations[namespace]
 }
 
 export function useActions<S = any>(
@@ -160,5 +160,5 @@ export function useActions<S = any>(
 				{} as { [k: string]: Function },
 			)
 	}
-	return _context.actions[namespace] as FunctionMap<S, VuexAction>
+	return _context.actions[namespace]
 }
