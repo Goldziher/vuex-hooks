@@ -1,5 +1,7 @@
 # vuex-hooks
 
+[![Build Status](https://travis-ci.org/Goldziher/vuex-hooks.svg?branch=master)](https://travis-ci.org/Goldziher/vuex-hooks)
+
 This package offers TypeScript enabled vuex composition-api hooks, closing the gap between [Vuex](https://github.com/vuejs/vuex) and the [@Vue/composition-api](https://github.com/vuejs/composition-api).
 
 ## Installation
