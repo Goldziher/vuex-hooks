@@ -49,6 +49,9 @@ export const store = new Vuex.Store({
 				},
 			},
 		},
+		dummy: {
+			namespaced: true,
+		},
 	},
 })
 
@@ -99,6 +102,13 @@ export const createTestApp = (
 }
 
 describe('test helpers', () => {
+	test('error throwing', () => {
+		expect(() => useStore()).toThrow()
+		expect(() => createTestApp(useState, ' ')).toThrow()
+		expect(() => createTestApp(useState)).toThrow()
+		expect(() => createTestApp(useState, 'nonExistingModule')).toThrow()
+		expect(() => createTestApp(useState, 'dummy/')).toThrow()
+	})
 	test('useStore', () => {
 		const testApp = createTestApp(useStore)
 		expect(testApp.vm.testStore).toEqual(testApp.vm.$store)
