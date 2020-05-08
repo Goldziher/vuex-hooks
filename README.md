@@ -4,7 +4,10 @@
 
 This tiny package offers TypeScript enabled vuex composition-api hooks, closing the gap between [vuex](https://github.com/vuejs/vuex) and the [@vue/composition-api](https://github.com/vuejs/composition-api).
 
-<!-- TOC -->autoauto- [vuex-hooks](#vuex-hooks)auto    - [Installation](#installation)auto    - [Usage](#usage)auto        - [Computed Refs and Methods](#computed-refs-and-methods)auto        - [TypeScript Support](#typescript-support)autoauto<!-- /TOC -->
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Computed Refs and Methods](#computed-refs-and-methods)
+  - [TypeScript Support](#typescript-support)
 
 ## Installation
 
