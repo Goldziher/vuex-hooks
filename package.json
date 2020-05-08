@@ -1,7 +1,7 @@
 {
 	"name": "vuex-hooks",
 	"version": "1.0.4",
-	"description": "Compact vuex composition api helper functions",
+	"description": "Typescript enabled vuex composition-api hooks",
 	"files": [
 		"dist"
 	],
