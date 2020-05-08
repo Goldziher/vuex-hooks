@@ -26,7 +26,8 @@
 	"keywords": [
 		"vuex",
 		"composition-api",
-		"hooks"
+		"hooks",
+		"typescript"
 	],
 	"author": "Na'aman Hirschfeld",
 	"license": "ISC",
