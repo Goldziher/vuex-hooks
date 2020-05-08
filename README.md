@@ -138,7 +138,13 @@ You can then use these in the hooks to get type checking and inference:
 
 ```typescript
 <script lang="ts">
-import { LocalesState, LocalesGetters, LocalesActions, LocalesMutations, RootState }
+import {
+    LocalesState,
+    LocalesGetters,
+    LocalesActions,
+    LocalesMutations,
+    RootState,
+} from './types'
 import { defineComponent } from '@vue/composition-api'
 import { useStore, useState, useActions, useMutations, useGetters } from 'vuex-hooks'
 
@@ -164,3 +170,80 @@ Doing this will result in the return values being correctly typed, so for exampl
     supportedLocales === Readonly<Ref<Locale>>
 
 ```
+
+You can also use the typings of a module directly. Lets assume there is a module that looks like so:
+
+```typescript
+interface User {
+    id: number
+    name: string
+    email: sring
+    company: string
+}
+interface UserState {
+    allUsers: User[]
+    currentUserId: number | null
+}
+const state: UserState = {
+	users: [],
+	currentUserId: null,
+}
+
+export default {
+	namespaced: true,
+	state,
+	actions: {
+		async getUsers(ctx: ActionContext<UserState, any>): Promise<void> {
+            try {
+                const response = await api.get('myapi/users/')
+                ctx.commit('SET_USERS', response.data)
+            } catch(error) {
+                ...
+            }
+        },
+        async updateUser(ctx: ActionContext<UserState, any>, payload: Partial<User>): Promise<void | User> {
+            try {
+                const userId = ctx.state.currentUserId
+                const response = await api.patch(`myapi/users/${userId}/`)
+                return response.data
+            } catch(error) {
+                ...
+            }
+        }
+    },
+    getters: {
+        getUserById(state: UserState) => (id: number): User | undefiend {
+            return state.users.find(user => user.id === id)
+        }
+    },
+    mutations: {
+        SET_USERS(state: UserState, payload: User[]): void {
+            state.users = payload
+        },
+    }
+}
+```
+
+Obviously you already have typings in this case, and you can use these:
+
+```typescript
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+import { useState, useActions, useMutations, useGetters } from 'vuex-hooks'
+import UsersStore from './store'
+
+export default defineComponent({
+    name: 'MyApp',
+    setup() {
+        const { currentUserId } = useState<typeof UsersStore['state']>('users') // ReadOnly<Ref<number | null>>
+        const { SET_USERS } = useMutations<typeof UsersStore['mutations']>('users') // (payload: User[]) => void
+        const { getUserById } = useActions<typeof UsersStore['actions']>('users') // (payload: Partial<User>) => Promise<void | User>
+        const { updateUser } = useGetters<typeof UsersStore['getters']>('users') // ReadOnly<Ref<(id: number) => User | undefiend>>
+
+        ...
+    }
+})
+</script>
+```
+
+The plugin remaps the typings and strips the vuex specific arguments from actions and mutations, so for example `updateUser` will not be inferred as `(ctx: ActionContext<UserState, any>, payload: Partial<User>) => Promise<void | User>` but rather as `(payload: Partial<User>) => Promise<void | User>`. It also returns correctly curried functions from getters.
