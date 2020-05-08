@@ -16,8 +16,6 @@ import { mount, createLocalVue, Wrapper } from '@vue/test-utils'
 
 const localVue = createLocalVue()
 
-localVue.config.silent = true
-
 localVue.use(compositionApi)
 localVue.use(VuexHooks)
 localVue.use(Vuex)

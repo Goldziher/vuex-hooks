@@ -1,4 +1,11 @@
-import { Store, mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import {
+	ActionContext,
+	Store,
+	mapActions,
+	mapGetters,
+	mapMutations,
+	mapState,
+} from 'vuex'
 import compositionApi, { Ref, computed } from '@vue/composition-api'
 import vue, { VueConstructor } from 'vue'
 
@@ -14,7 +21,7 @@ export type VuexStore<R> = Store<R> & {
 }
 export type Computed<T> = Readonly<Ref<Readonly<T>>>
 export type Dictionary<T> = { [k: string]: T }
-export type MapToComputed<T = any> = T extends object
+export type StateMap<T = any> = T extends object
 	? {
 			[K in keyof T]: T[K] extends Function
 				? Readonly<Ref<T[K]>>
@@ -22,14 +29,34 @@ export type MapToComputed<T = any> = T extends object
 	  }
 	: Dictionary<Computed<any>>
 
-export type FunctionMap<T = any, F = Function> = T extends object
+export type GetterMap<T = any> = T extends object
 	? {
-			[K in keyof T]: T[K]
+			[K in keyof T]: T[K] extends (...args: any) => infer R
+				? R extends Function
+					? Readonly<Ref<R>>
+					: Readonly<Ref<T[K]>>
+				: Computed<T[K]>
 	  }
-	: Dictionary<F>
+	: Dictionary<Computed<any>>
 
-export type VuexMutation = (payload: any) => void
-export type VuexAction = (payload: any) => Promise<any> | any
+export type ActionMap<T = any> = T extends object
+	? {
+			[K in keyof T]: T[K] extends (
+				ctx: ActionContext<any, any>,
+				...payload: infer P
+			) => infer R
+				? (...payload: P) => R
+				: T[K]
+	  }
+	: Dictionary<(payload: any) => Promise<any> | any>
+
+export type MutationMap<T = any> = T extends object
+	? {
+			[K in keyof T]: T[K] extends (state: any, ...payload: infer P) => infer R
+				? (...payload: P) => R
+				: T[K]
+	  }
+	: Dictionary<(payload: any) => void>
 
 vue.use(compositionApi)
 
@@ -101,38 +128,35 @@ const getModuleKeys = (
 	return Object.keys(subModule)
 }
 
-function generateComputedDict<S>(
+const reduceToDict = (inputArr: [string, any][]): Dictionary<any> =>
+	inputArr.reduce(
+		(obj, [key, value]) => ((obj[key] = value), obj),
+		{} as { [k: string]: any },
+	)
+
+function generateComputedDict<R>(
 	mapper: ReturnType<typeof mapState> | ReturnType<typeof mapGetters>,
-): MapToComputed<S> {
-	return Object.entries(mapper)
-		.map(
-			([key, value]) =>
-				[key, computed(() => value.call(_context.getVm()))] as [
-					string,
-					Computed<any>,
-				],
-		)
-		.reduce(
-			(obj, [key, value]) => ((obj[key] = value), obj),
-			{} as { [k: string]: Computed<any> },
-		) as MapToComputed<S>
+): R {
+	return reduceToDict(
+		Object.entries(mapper).map(([key, value]) => [
+			key,
+			computed(() => value.call(_context.getVm())),
+		]),
+	) as R
 }
 
-function generateMethodDict<S, F>(
+function generateMethodDict<R>(
 	mapper: ReturnType<typeof mapActions> | ReturnType<typeof mapMutations>,
-): FunctionMap<S, F> {
-	return Object.entries(mapper)
-		.map(
-			([key, value]) =>
-				[key, value.bind(_context.getVm())] as [string, Function],
-		)
-		.reduce(
-			(obj, [key, value]) => ((obj[key] = value), obj),
-			{} as { [k: string]: any },
-		) as FunctionMap<S, F>
+): R {
+	return reduceToDict(
+		Object.entries(mapper).map(([key, value]) => [
+			key,
+			value.bind(_context.getVm()),
+		]),
+	) as R
 }
 
-export function useState<S = any>(namespace: string): MapToComputed<S> {
+export function useState<S = any>(namespace: string): StateMap<S> {
 	validateNamespace(namespace, 'useState')
 	if (!_context.state[namespace]) {
 		_context.state[namespace] = generateComputedDict(
@@ -142,34 +166,30 @@ export function useState<S = any>(namespace: string): MapToComputed<S> {
 	return _context.state[namespace]
 }
 
-export function useGetters<S = any>(namespace: string): MapToComputed<S> {
+export function useGetters<S = any>(namespace: string): GetterMap<S> {
 	validateNamespace(namespace, 'useGetters')
 	if (!_context.getters[namespace]) {
-		_context.getters[namespace] = generateComputedDict(
+		_context.getters[namespace] = generateComputedDict<GetterMap<S>>(
 			mapGetters(namespace, getModuleKeys(namespace, 'getters')),
 		)
 	}
 	return _context.getters[namespace]
 }
 
-export function useMutations<S = any>(
-	namespace: string,
-): FunctionMap<S, VuexMutation> {
+export function useMutations<S = any>(namespace: string): MutationMap<S> {
 	validateNamespace(namespace, 'useMutations')
 	if (!_context.mutations[namespace]) {
-		_context.mutations[namespace] = generateMethodDict<S, VuexMutation>(
+		_context.mutations[namespace] = generateMethodDict<MutationMap<S>>(
 			mapMutations(namespace, getModuleKeys(namespace, 'mutations')),
 		)
 	}
 	return _context.mutations[namespace]
 }
 
-export function useActions<S = any>(
-	namespace: string,
-): FunctionMap<S, VuexAction> {
+export function useActions<S = any>(namespace: string): ActionMap<S> {
 	validateNamespace(namespace, 'useActions')
 	if (!_context.actions[namespace]) {
-		_context.actions[namespace] = generateMethodDict<S, VuexAction>(
+		_context.actions[namespace] = generateMethodDict<ActionMap<S>>(
 			mapActions(namespace, getModuleKeys(namespace, 'actions')),
 		)
 	}
