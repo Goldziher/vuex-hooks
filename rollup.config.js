@@ -1,5 +1,5 @@
 import typescript from 'rollup-plugin-typescript2'
-import { uglify } from 'rollup-plugin-uglify'
+import { terser } from 'rollup-plugin-terser'
 
 const input = 'src/index.ts'
 const output = (type) => ({
@@ -17,37 +17,30 @@ const output = (type) => ({
 	},
 })
 const external = ['vue', 'vuex', '@vue/composition-api']
+const plugins = [
+	typescript({
+		useTsconfigDeclarationDir: false,
+	}),
+	terser(),
+]
 
 export default [
 	{
 		input,
 		external,
 		...output('esm'),
-		plugins: [
-			typescript({
-				useTsconfigDeclarationDir: false,
-			}),
-		],
+		plugins,
 	},
 	{
 		input,
 		external,
 		...output('cjs'),
-		plugins: [
-			typescript({
-				useTsconfigDeclarationDir: false,
-			}),
-		],
+		plugins,
 	},
 	{
 		input,
 		external,
 		...output('umd'),
-		plugins: [
-			typescript({
-				useTsconfigDeclarationDir: false,
-			}),
-			uglify(),
-		],
+		plugins,
 	},
 ]
