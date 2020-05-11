@@ -1,6 +1,6 @@
 # vuex-hooks
 
-[![Build Status](https://travis-ci.org/Goldziher/vuex-hooks.svg?branch=master)](https://travis-ci.org/Goldziher/vuex-hooks) [![Coverage Status](https://coveralls.io/repos/github/Goldziher/vuex-hooks/badge.svg?branch=master)](https://coveralls.io/github/Goldziher/vuex-hooks?branch=master) [![npm version](https://badge.fury.io/js/vuex-hooks.svg)](https://badge.fury.io/js/vuex-hooks)
+[![Build Status](https://travis-ci.org/Goldziher/vuex-hooks.svg?branch=master)](https://travis-ci.org/Goldziher/vuex-hooks) [![Coverage Status](https://coveralls.io/repos/github/Goldziher/vuex-hooks/badge.svg?branch=master)](https://coveralls.io/github/Goldziher/vuex-hooks?branch=master) [![npm version](https://badge.fury.io/js/vuex-hooks.svg)](https://badge.fury.io/js/vuex-hooks) [![Maintainability](https://api.codeclimate.com/v1/badges/de1f807703330e29c31f/maintainability)](https://codeclimate.com/github/Goldziher/vuex-hooks/maintainability)
 
 This tiny package offers TypeScript enabled vuex composition-api hooks, closing the gap between [vuex](https://github.com/vuejs/vuex) and the [@vue/composition-api](https://github.com/vuejs/composition-api).
 
