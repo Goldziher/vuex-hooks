@@ -63,16 +63,7 @@ export function useStore<RootState = any>(): Store<RootState> {
 }
 
 function mapFromStore<R>(type: ModuleKey, namespace: string): R {
-	validateNamespace(
-		namespace,
-		type === 'state'
-			? 'useState'
-			: type === 'getters'
-			? 'useGetters'
-			: type === 'actions'
-			? 'useActions'
-			: 'useMutations',
-	)
+	validateNamespace(namespace, type)
 	if (!_context[type][namespace]) {
 		_context[type][namespace] =
 			type === 'state' || type === 'getters'

@@ -59,21 +59,15 @@ export function generateMethodDict(
 }
 
 export function validateNamespace(namespace: any, type: ModuleKey): void {
-	if (typeof namespace !== 'string') {
+	const HELPER_NAMES = {
+		state: 'useState',
+		getters: 'useGetters',
+		actions: 'useActions',
+		mutations: 'useMutations',
+	}
+	if (typeof namespace !== 'string' || !namespace.trim()) {
 		throw new Error(
-			`[vuex-hooks] invalid namespace type, expected string got ${typeof namespace}`,
-		)
-	} else if (!namespace.trim()) {
-		throw new Error(
-			`[vuex-hooks] ${
-				type === 'state'
-					? 'useState'
-					: type === 'getters'
-					? 'useGetters'
-					: type === 'actions'
-					? 'useActions'
-					: 'useMutations'
-			} called with invalid namespace`,
+			`[vuex-hooks] ${HELPER_NAMES[type]} called with invalid namespace`,
 		)
 	}
 }
