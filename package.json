@@ -16,8 +16,9 @@
 		"prepublishOnly": "yarn build",
 		"build": "rimraf dist && rollup -c rollup.config.js",
 		"postpublish": "rimraf dist",
-		"coveralls": "jest --coverage --silent && cat ./coverage/lcov.info | coveralls",
-		"test": "jest --silent"
+		"coveralls": "yarn coverage && cat ./coverage/lcov.info | coveralls",
+		"test": "jest --silent",
+		"coverage": "yarn test --coverage"
 	},
 	"repository": {
 		"type": "git",
