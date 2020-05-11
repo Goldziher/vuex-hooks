@@ -1,11 +1,11 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { computed } from '@vue/composition-api'
-import { VuexStore, Dictionary } from './types'
+import { VuexStore, Dictionary, ModuleKey } from './types'
 
 const getModuleKeys = (
 	vm: Vue,
 	namespace: string,
-	type: 'state' | 'mutations' | 'actions' | 'getters',
+	type: ModuleKey,
 ): string[] => {
 	const store = vm.$store as VuexStore<any>
 	const module =
@@ -58,12 +58,22 @@ export function generateMethodDict(
 	)
 }
 
-export function validateNamespace(namespace: any, helper: string): void {
+export function validateNamespace(namespace: any, type: ModuleKey): void {
 	if (typeof namespace !== 'string') {
 		throw new Error(
 			`[vuex-hooks] invalid namespace type, expected string got ${typeof namespace}`,
 		)
 	} else if (!namespace.trim()) {
-		throw new Error(`[vuex-hooks] ${helper} called with invalid namespace`)
+		throw new Error(
+			`[vuex-hooks] ${
+				type === 'state'
+					? 'useState'
+					: type === 'getters'
+					? 'useGetters'
+					: type === 'actions'
+					? 'useActions'
+					: 'useMutations'
+			} called with invalid namespace`,
+		)
 	}
 }

@@ -7,6 +7,7 @@ import {
 	GetterMap,
 	MutationMap,
 	ActionMap,
+	ModuleKey,
 } from './types'
 import {
 	validateNamespace,
@@ -61,50 +62,38 @@ export function useStore<RootState = any>(): Store<RootState> {
 	return vm.$store as Store<RootState>
 }
 
-export function useState<T = any>(namespace: string): StateMap<T> {
-	validateNamespace(namespace, 'useState')
-	if (!_context.state[namespace]) {
-		_context.state[namespace] = generateComputedDict(
-			_context.$vm.get(),
-			namespace,
-			'state',
-		)
+function mapFromStore<R>(type: ModuleKey, namespace: string): R {
+	validateNamespace(
+		namespace,
+		type === 'state'
+			? 'useState'
+			: type === 'getters'
+			? 'useGetters'
+			: type === 'actions'
+			? 'useActions'
+			: 'useMutations',
+	)
+	if (!_context[type][namespace]) {
+		_context[type][namespace] =
+			type === 'state' || type === 'getters'
+				? generateComputedDict(_context.$vm.get(), namespace, type)
+				: generateMethodDict(_context.$vm.get(), namespace, type)
 	}
-	return _context.state[namespace]
+	return _context[type][namespace] as R
+}
+
+export function useState<T = any>(namespace: string): StateMap<T> {
+	return mapFromStore<StateMap<T>>('state', namespace)
 }
 
 export function useGetters<T = any>(namespace: string): GetterMap<T> {
-	validateNamespace(namespace, 'useGetters')
-	if (!_context.getters[namespace]) {
-		_context.getters[namespace] = generateComputedDict(
-			_context.$vm.get(),
-			namespace,
-			'getters',
-		)
-	}
-	return _context.getters[namespace]
+	return mapFromStore<GetterMap<T>>('getters', namespace)
 }
 
 export function useMutations<T = any>(namespace: string): MutationMap<T> {
-	validateNamespace(namespace, 'useMutations')
-	if (!_context.mutations[namespace]) {
-		_context.mutations[namespace] = generateMethodDict(
-			_context.$vm.get(),
-			namespace,
-			'mutations',
-		)
-	}
-	return _context.mutations[namespace]
+	return mapFromStore<MutationMap<T>>('mutations', namespace)
 }
 
 export function useActions<T = any>(namespace: string): ActionMap<T> {
-	validateNamespace(namespace, 'useActions')
-	if (!_context.actions[namespace]) {
-		_context.actions[namespace] = generateMethodDict(
-			_context.$vm.get(),
-			namespace,
-			'actions',
-		)
-	}
-	return _context.actions[namespace]
+	return mapFromStore<ActionMap<T>>('actions', namespace)
 }

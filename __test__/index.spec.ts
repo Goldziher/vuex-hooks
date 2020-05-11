@@ -13,6 +13,7 @@ import VuexHooks, {
 import compositionApi, { defineComponent } from '@vue/composition-api'
 import Vuex, { ActionContext } from 'vuex'
 import { mount, createLocalVue, Wrapper } from '@vue/test-utils'
+import { Dictionary } from '../src/types'
 
 const localVue = createLocalVue()
 
@@ -53,45 +54,44 @@ export const store = new Vuex.Store({
 	},
 })
 
+const compositionMock = defineComponent({
+	name: 'compositionMock',
+	template: '<div></div>',
+	props: {
+		compositionFn: {
+			type: [Function, Array],
+			required: true,
+		},
+		namespace: {
+			type: String,
+			required: false,
+		},
+	},
+	setup({
+		compositionFn,
+		namespace,
+	}: {
+		compositionFn: Function | Function[]
+		namespace?: string
+	}) {
+		if (typeof compositionFn === 'function') {
+			if (!namespace) return { testStore: compositionFn() }
+			return { ...compositionFn(namespace) }
+		}
+		const returnVal: Dictionary = {}
+		compositionFn.map((fn) => {
+			Object.entries(fn(namespace)).forEach(
+				([key, value]) => (returnVal[key] = value),
+			)
+		})
+		return returnVal
+	},
+})
+
 export const createTestApp = (
 	hook: Function | Function[],
 	namespace?: string,
 ): Wrapper<any> => {
-	const compositionMock = defineComponent({
-		name: 'compositionMock',
-		template: '<div></div>',
-		props: {
-			compositionFn: {
-				type: [Function, Array],
-				required: true,
-			},
-			namespace: {
-				type: String,
-				required: false,
-			},
-		},
-		setup({
-			compositionFn,
-			namespace,
-		}: {
-			compositionFn: Function | Function[]
-			namespace?: string
-		}) {
-			if (typeof compositionFn === 'function') {
-				if (!namespace) return { testStore: compositionFn() }
-				return { ...compositionFn(namespace) }
-			}
-			const returnVal: { [k: string]: any } = {}
-			compositionFn.map((fn) => {
-				Object.entries(fn(namespace)).forEach(
-					([key, value]) => (returnVal[key] = value),
-				)
-			})
-
-			return { ...returnVal }
-		},
-	})
-
 	return mount(compositionMock, {
 		store,
 		localVue,

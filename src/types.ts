@@ -1,6 +1,6 @@
 import { ActionContext, Store } from 'vuex'
 import { Ref } from '@vue/composition-api'
-
+export type ModuleKey = 'state' | 'mutations' | 'actions' | 'getters'
 export type VuexStore<R> = Store<R> & {
 	_modulesNamespaceMap: Dictionary<{
 		_rawModule: {
