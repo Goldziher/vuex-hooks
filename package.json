@@ -5,6 +5,7 @@
 	"files": [
 		"dist"
 	],
+	"readme": "README.md",
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.js",
 	"browser": {
@@ -60,7 +61,7 @@
 		"vuex": "^3.3.0"
 	},
 	"peerDependencies": {
-		"@vue/composition-api": ">=0.5",
+		"@vue/composition-api": ">=0.2",
 		"vue": ">=2",
 		"vuex": ">=3"
 	}
