@@ -1,8 +1,8 @@
 # vuex-hooks
 
-[![Build Status](https://travis-ci.org/Goldziher/vuex-hooks.svg?branch=master)](https://travis-ci.org/Goldziher/vuex-hooks) [![Coverage Status](https://coveralls.io/repos/github/Goldziher/vuex-hooks/badge.svg?branch=master)](https://coveralls.io/github/Goldziher/vuex-hooks?branch=master) [![npm version](https://badge.fury.io/js/vuex-hooks.svg)](https://badge.fury.io/js/vuex-hooks) [![Maintainability](https://api.codeclimate.com/v1/badges/de1f807703330e29c31f/maintainability)](https://codeclimate.com/github/Goldziher/vuex-hooks/maintainability)
+[![npm version](https://badge.fury.io/js/vuex-hooks.svg)](https://badge.fury.io/js/vuex-hooks) [![Build Status](https://travis-ci.org/Goldziher/vuex-hooks.svg?branch=master)](https://travis-ci.org/Goldziher/vuex-hooks) [![Coverage Status](https://coveralls.io/repos/github/Goldziher/vuex-hooks/badge.svg?branch=master)](https://coveralls.io/github/Goldziher/vuex-hooks?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/de1f807703330e29c31f/maintainability)](https://codeclimate.com/github/Goldziher/vuex-hooks/maintainability)
 
-This tiny package offers TypeScript enabled vuex composition-api hooks, closing the gap between [vuex](https://github.com/vuejs/vuex) and the [@vue/composition-api](https://github.com/vuejs/composition-api).
+This package offers TypeScript enabled vuex composition-api hooks, closing the gap between [vuex](https://github.com/vuejs/vuex) and the [@vue/composition-api](https://github.com/vuejs/composition-api).
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -110,26 +110,26 @@ When using TypeScript **typing is optional** but is of course highly recommended
 Lets assume you defined some interfaces like so in a types.ts file:
 
 ```typescript
-type Locale = { lang: string; id: number }
+export type Locale = { lang: string; id: number }
 
-interface LocalesState {
+export interface LocalesState {
 	supportedLocales: Locale[]
 	currentLocaleId: number
 }
 
-interface LocalesGetters {
+export interface LocalesGetters {
 	currentLocale: () => Locale
 }
 
-interface LocalesActions {
+export interface LocalesActions {
 	getLocales: () => Promise<Locale[]>
 }
 
-interface LocalesMutations {
+export interface LocalesMutations {
 	SET_LOCALE: (payload: Locale) => void
 }
 
-interface RootState {
+export interface RootState {
 	locales: LocalesState
 }
 ```
@@ -151,25 +151,18 @@ import { useStore, useState, useActions, useMutations, useGetters } from 'vuex-h
 export default defineComponent({
     name: 'MyApp',
     setup() {
-        const Store = useStore<RootState>()
-        const { supportedLocales } = useState<LocalesState>('locales')
-        const { SET_LOCALE } = useMutations<LocalesMutations>('locales')
-        const { getLocales } = useActions<LocalesActions>('locales')
-        const { currentLocale } = useGetters<LocalesGetters>('locales')
-
+        const Store = useStore<RootState>() // Store<RootState>
+        const { supportedLocales } = useState<LocalesState>('locales') // Readonly<Ref<Locale>>
+        const { currentLocale } = useGetters<LocalesGetters>('locales') // Readonly<Ref<Locale>>
+        const { SET_LOCALE } = useMutations<LocalesMutations>('locales') // (payload: Locale) => void
+        const { getLocales } = useActions<LocalesActions>('locales') // () => Promise<Locale[]>
         ...
     }
 })
-<script>
+</script>
 ```
 
-Doing this will result in the return values being correctly typed, so for example the `supportedLocales` value will be:
-
-```typescript
-
-    supportedLocales === Readonly<Ref<Locale>>
-
-```
+Doing this will result in the return values being correctly typed, so for example `supportedLocales` will be typed as `Readonly<Ref<Locale>>`.
 
 You can also use the typings of a module directly. Lets assume there is a module that looks like so:
 
@@ -236,10 +229,9 @@ export default defineComponent({
     name: 'MyApp',
     setup() {
         const { currentUserId } = useState<typeof UsersStore['state']>('users') // ReadOnly<Ref<number | null>>
+        const { updateUser } = useGetters<typeof UsersStore['getters']>('users') // ReadOnly<Ref<(id: number) => User | undefiend>>
         const { SET_USERS } = useMutations<typeof UsersStore['mutations']>('users') // (payload: User[]) => void
         const { getUserById } = useActions<typeof UsersStore['actions']>('users') // (payload: Partial<User>) => Promise<void | User>
-        const { updateUser } = useGetters<typeof UsersStore['getters']>('users') // ReadOnly<Ref<(id: number) => User | undefiend>>
-
         ...
     }
 })

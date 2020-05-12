@@ -32,7 +32,7 @@
 		"typescript"
 	],
 	"author": "Na'aman Hirschfeld",
-	"license": "ISC",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/Goldziher/vuex-hooks/issues"
 	},
