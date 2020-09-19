@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { ActionContext, Store } from 'vuex'
 import { Ref } from '@vue/composition-api'
 export type ModuleKey = 'state' | 'mutations' | 'actions' | 'getters'

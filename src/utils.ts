@@ -26,6 +26,7 @@ const getModuleKeys = (
 
 const reduceToDict = (inputArr: [string, any][]): Dictionary =>
 	inputArr.reduce(
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		(obj, [key, value]) => ((obj[key] = value), obj),
 		{} as { [k: string]: any },
 	)
@@ -39,6 +40,7 @@ export function generateComputedDict(
 	return reduceToDict(
 		Object.entries(
 			type === 'state' ? mapState(namespace, map) : mapGetters(namespace, map),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		).map(([key, value]) => [key, computed(() => value.call(vm))]),
 	)
 }
@@ -58,6 +60,7 @@ export function generateMethodDict(
 	)
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function validateNamespace(namespace: any, type: ModuleKey): void {
 	const HELPER_NAMES = {
 		state: 'useState',
